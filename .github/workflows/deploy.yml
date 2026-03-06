@@ -34,7 +34,8 @@ jobs:
           port: ${{ secrets.VPS_PORT }}
           script: |
             cd ~/dockerized/webhook-sync-bridge
-            git pull origin main
+            git fetch origin
+            git reset --hard origin/main
             rm -f docker-compose.override.yml
             rm -rf .local/
 
@@ -48,7 +49,8 @@ jobs:
           port: ${{ secrets.VPS_PORT }}
           script: |
             cd ~/dockerized/webhook-sync-bridge
-            git pull origin main
+            git fetch origin
+            git reset --hard origin/main
             rm -f docker-compose.override.yml
             rm -rf .local/
             docker compose down
@@ -64,7 +66,8 @@ jobs:
           port: ${{ secrets.VPS_PORT }}
           script: |
             cd ~/dockerized/webhook-sync-bridge
-            git pull origin main
+            git fetch origin
+            git reset --hard origin/main
             rm -f docker-compose.override.yml
             rm -rf .local/
             docker compose down -v
