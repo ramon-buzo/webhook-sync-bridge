@@ -1,0 +1,70 @@
+{
+  "eyebrow": "Demo",
+  "hero": {
+    "title_line1": "Subscribe",
+    "title_em": "& confirm."
+  },
+  "subtitle": "Async webhook flow bridged to sync UX via Redis BLPOP. Fill in your details and watch the flow happen in real time.",
+  "form": {
+    "phone_label": "Phone Number",
+    "phone_placeholder": "+52 664 000 0000",
+    "plan_label": "Plan",
+    "plan_basic": "Basic — $4.99/mo",
+    "plan_standard": "Standard — $9.99/mo",
+    "plan_premium": "Premium — $19.99/mo",
+    "toggle_label": "Simulate",
+    "toggle_strong": "partner error",
+    "btn": "Subscribe now"
+  },
+  "how": {
+    "title": "How it works",
+    "step1": "Landing calls backend → backend calls partner mock",
+    "step2": "Partner returns ACK 0 (ok) or error",
+    "step3": "Backend blocks on Redis BLPOP (max 5s)",
+    "step4": "Partner fires XML webhook after 1–3s delay",
+    "step5": "Webhook writes to Redis → BLPOP wakes up",
+    "step6": "User sees result — feels synchronous"
+  },
+  "flow": {
+    "eyebrow": "Flow",
+    "placeholder": "Waiting for request...",
+    "step1_title": "Calling partner API",
+    "step2_title": "Awaiting ACK",
+    "step3_title": "Blocking on Redis BLPOP",
+    "step4_title": "Webhook received",
+    "step5_title": "Result"
+  },
+  "status": {
+    "sending": "Sending subscription request...",
+    "sent": "Request sent",
+    "waiting_ack": "Waiting for partner acknowledgement...",
+    "ack_success": "ACK: 0 (success)",
+    "ack_forced": "ACK: 1 (forced error)",
+    "blpop_waiting": "Blocking on Redis BLPOP (max 5s)...",
+    "webhook_waiting": "Waiting for partner webhook...",
+    "blpop_unblocked": "BLPOP unblocked after ~{elapsed}s",
+    "webhook_received": "XML parsed · Redis LPUSH received",
+    "subscription_active": "Subscription active",
+    "partner_rejected": "ACK: {ack} — partner rejected",
+    "skipped": "Skipped",
+    "subscription_failed": "Subscription failed",
+    "blpop_timeout": "BLPOP timeout after 5s",
+    "webhook_never": "Webhook never arrived"
+  },
+  "result": {
+    "confirmed": "Subscription confirmed",
+    "rejected": "Partner rejected",
+    "timeout": "Timeout",
+    "timeout_msg": "Webhook did not arrive within 5s",
+    "error": "Error",
+    "connection_error": "Connection error",
+    "phone": "phone",
+    "plan": "plan",
+    "price": "price",
+    "status": "status",
+    "elapsed": "elapsed"
+  },
+  "alert": {
+    "phone_required": "Phone number is required"
+  }
+}

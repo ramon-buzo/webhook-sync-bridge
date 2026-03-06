@@ -1,0 +1,70 @@
+{
+  "eyebrow": "Demo",
+  "hero": {
+    "title_line1": "Suscríbete",
+    "title_em": "y confirma."
+  },
+  "subtitle": "Flujo asíncrono de webhook convertido a UX síncrona mediante Redis BLPOP. Ingresa tus datos y observa el flujo en tiempo real.",
+  "form": {
+    "phone_label": "Número de Teléfono",
+    "phone_placeholder": "+52 664 000 0000",
+    "plan_label": "Plan",
+    "plan_basic": "Básico — $4.99/mes",
+    "plan_standard": "Estándar — $9.99/mes",
+    "plan_premium": "Premium — $19.99/mes",
+    "toggle_label": "Simular",
+    "toggle_strong": "error del partner",
+    "btn": "Suscribirse ahora"
+  },
+  "how": {
+    "title": "Cómo funciona",
+    "step1": "La landing llama al backend → el backend llama al partner mock",
+    "step2": "El partner devuelve ACK 0 (ok) o error",
+    "step3": "El backend bloquea en Redis BLPOP (máx 5s)",
+    "step4": "El partner dispara un webhook XML tras 1–3s de delay",
+    "step5": "El webhook escribe en Redis → BLPOP se desbloquea",
+    "step6": "El usuario ve el resultado — se siente síncrono"
+  },
+  "flow": {
+    "eyebrow": "Flujo",
+    "placeholder": "Esperando solicitud...",
+    "step1_title": "Llamando al partner API",
+    "step2_title": "Esperando ACK",
+    "step3_title": "Bloqueando en Redis BLPOP",
+    "step4_title": "Webhook recibido",
+    "step5_title": "Resultado"
+  },
+  "status": {
+    "sending": "Enviando solicitud de suscripción...",
+    "sent": "Solicitud enviada",
+    "waiting_ack": "Esperando confirmación del partner...",
+    "ack_success": "ACK: 0 (éxito)",
+    "ack_forced": "ACK: 1 (error forzado)",
+    "blpop_waiting": "Bloqueando en Redis BLPOP (máx 5s)...",
+    "webhook_waiting": "Esperando webhook del partner...",
+    "blpop_unblocked": "BLPOP desbloqueado tras ~{elapsed}s",
+    "webhook_received": "XML procesado · Redis LPUSH recibido",
+    "subscription_active": "Suscripción activa",
+    "partner_rejected": "ACK: {ack} — partner rechazó",
+    "skipped": "Omitido",
+    "subscription_failed": "Suscripción fallida",
+    "blpop_timeout": "Timeout de BLPOP tras 5s",
+    "webhook_never": "El webhook nunca llegó"
+  },
+  "result": {
+    "confirmed": "Suscripción confirmada",
+    "rejected": "Partner rechazó",
+    "timeout": "Tiempo agotado",
+    "timeout_msg": "El webhook no llegó en 5s",
+    "error": "Error",
+    "connection_error": "Error de conexión",
+    "phone": "teléfono",
+    "plan": "plan",
+    "price": "precio",
+    "status": "estado",
+    "elapsed": "tiempo"
+  },
+  "alert": {
+    "phone_required": "El número de teléfono es requerido"
+  }
+}

@@ -23,6 +23,10 @@
         .eyebrow::before { content:''; display:block; width:1.5rem; height:1px; background:var(--accent); }
         .panel-right .eyebrow { color:var(--accent2); }
         .panel-right .eyebrow::before { background:var(--accent2); }
+        .lang-toggle { display:flex; border:1px solid var(--border); overflow:hidden; margin-left:auto; }
+        .lang-btn { padding:.3rem .6rem; cursor:pointer; color:var(--muted); background:transparent; border:none; font-family:'DM Mono',monospace; font-size:.58rem; letter-spacing:.12em; text-transform:uppercase; transition:background .2s,color .2s; }
+        .lang-btn:hover { color:var(--accent); }
+        .lang-btn.active { background:var(--ink); color:var(--cream); }
         h1 { font-family:'Playfair Display',serif; font-size:2rem; font-weight:400; letter-spacing:-.02em; color:var(--ink); margin-bottom:.5rem; line-height:1.2; }
         h1 em { font-style:italic; color:var(--accent); }
         .subtitle { font-size:.7rem; color:var(--muted); letter-spacing:.03em; margin-bottom:2rem; line-height:1.7; }
@@ -39,9 +43,9 @@
         .toggle input:checked + .toggle-slider::before { transform:translateX(16px); background:var(--red); }
         .toggle-label { font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
         .toggle-label strong { color:var(--red); font-weight:400; }
-        button { width:100%; padding:.875rem; background:var(--accent); border:none; cursor:pointer; font-family:'DM Mono',monospace; font-size:.72rem; letter-spacing:.15em; text-transform:uppercase; color:var(--cream); transition:background .2s; }
-        button:hover:not(:disabled) { background:var(--accent2); }
-        button:disabled { opacity:.6; cursor:not-allowed; }
+        button#btn { width:100%; padding:.875rem; background:var(--accent); border:none; cursor:pointer; font-family:'DM Mono',monospace; font-size:.72rem; letter-spacing:.15em; text-transform:uppercase; color:var(--cream); transition:background .2s; }
+        button#btn:hover:not(:disabled) { background:var(--accent2); }
+        button#btn:disabled { opacity:.6; cursor:not-allowed; }
         .stepper { display:none; flex-direction:column; }
         .stepper.visible { display:flex; }
         .step { display:flex; align-items:flex-start; gap:1rem; padding:1rem 0; border-bottom:1px solid rgba(245,240,232,0.06); opacity:.3; transition:opacity .3s; }
@@ -83,21 +87,31 @@
 
 <div class="layout">
     <div class="panel">
-        <div class="eyebrow">Demo</div>
-        <h1>Subscribe<br><em>&amp; confirm.</em></h1>
-        <p class="subtitle">Async webhook flow bridged to sync UX via Redis BLPOP. Fill in your details and watch the flow happen in real time.</p>
+        <div class="eyebrow" style="margin-bottom:.75rem;">
+            <span data-i18n="eyebrow">Demo</span>
+            <div class="lang-toggle">
+                <button class="lang-btn active" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="es">ES</button>
+            </div>
+        </div>
+
+        <h1>
+            <span data-i18n="hero.title_line1">Subscribe</span><br>
+            <em data-i18n="hero.title_em">&amp; confirm.</em>
+        </h1>
+        <p class="subtitle" data-i18n="subtitle">Async webhook flow bridged to sync UX via Redis BLPOP. Fill in your details and watch the flow happen in real time.</p>
 
         <div class="field">
-            <label>Phone Number</label>
+            <label data-i18n="form.phone_label">Phone Number</label>
             <input type="tel" id="phone" placeholder="+52 664 000 0000" />
         </div>
 
         <div class="field">
-            <label>Plan</label>
+            <label data-i18n="form.plan_label">Plan</label>
             <select id="plan">
-                <option value="basic">Basic — $4.99/mo</option>
-                <option value="standard" selected>Standard — $9.99/mo</option>
-                <option value="premium">Premium — $19.99/mo</option>
+                <option value="basic" data-i18n="form.plan_basic">Basic — $4.99/mo</option>
+                <option value="standard" selected data-i18n="form.plan_standard">Standard — $9.99/mo</option>
+                <option value="premium" data-i18n="form.plan_premium">Premium — $19.99/mo</option>
             </select>
         </div>
 
@@ -106,58 +120,62 @@
                 <input type="checkbox" id="forceError">
                 <div class="toggle-slider"></div>
             </div>
-            <span class="toggle-label">Simulate <strong>partner error</strong></span>
+            <span class="toggle-label">
+                <span data-i18n="form.toggle_label">Simulate</span> <strong data-i18n="form.toggle_strong">partner error</strong>
+            </span>
         </label>
 
-        <button id="btn" onclick="subscribe()">Subscribe now</button>
+        <button id="btn" onclick="subscribe()">
+            <span data-i18n="form.btn">Subscribe now</span>
+        </button>
 
         <div class="how">
-            <div class="how-title">How it works</div>
-            <div class="how-step"><span class="how-num">01</span> Landing calls backend → backend calls partner mock</div>
-            <div class="how-step"><span class="how-num">02</span> Partner returns ACK 0 (ok) or error</div>
-            <div class="how-step"><span class="how-num">03</span> Backend blocks on Redis BLPOP (max 5s)</div>
-            <div class="how-step"><span class="how-num">04</span> Partner fires XML webhook after 1–3s delay</div>
-            <div class="how-step"><span class="how-num">05</span> Webhook writes to Redis → BLPOP wakes up</div>
-            <div class="how-step"><span class="how-num">06</span> User sees result — feels synchronous</div>
+            <div class="how-title" data-i18n="how.title">How it works</div>
+            <div class="how-step"><span class="how-num">01</span><span data-i18n="how.step1">Landing calls backend → backend calls partner mock</span></div>
+            <div class="how-step"><span class="how-num">02</span><span data-i18n="how.step2">Partner returns ACK 0 (ok) or error</span></div>
+            <div class="how-step"><span class="how-num">03</span><span data-i18n="how.step3">Backend blocks on Redis BLPOP (max 5s)</span></div>
+            <div class="how-step"><span class="how-num">04</span><span data-i18n="how.step4">Partner fires XML webhook after 1–3s delay</span></div>
+            <div class="how-step"><span class="how-num">05</span><span data-i18n="how.step5">Webhook writes to Redis → BLPOP wakes up</span></div>
+            <div class="how-step"><span class="how-num">06</span><span data-i18n="how.step6">User sees result — feels synchronous</span></div>
         </div>
     </div>
 
     <div class="panel-right">
-        <div class="eyebrow">Flow</div>
+        <div class="eyebrow" data-i18n="flow.eyebrow">Flow</div>
 
         <div class="stepper" id="stepper">
             <div class="step" id="step-1">
                 <div class="step-icon" id="icon-1">01</div>
                 <div class="step-content">
-                    <div class="step-title">Calling partner API</div>
+                    <div class="step-title" data-i18n="flow.step1_title">Calling partner API</div>
                     <div class="step-detail" id="detail-1">—</div>
                 </div>
             </div>
             <div class="step" id="step-2">
                 <div class="step-icon" id="icon-2">02</div>
                 <div class="step-content">
-                    <div class="step-title">Awaiting ACK</div>
+                    <div class="step-title" data-i18n="flow.step2_title">Awaiting ACK</div>
                     <div class="step-detail" id="detail-2">—</div>
                 </div>
             </div>
             <div class="step" id="step-3">
                 <div class="step-icon" id="icon-3">03</div>
                 <div class="step-content">
-                    <div class="step-title">Blocking on Redis BLPOP</div>
+                    <div class="step-title" data-i18n="flow.step3_title">Blocking on Redis BLPOP</div>
                     <div class="step-detail" id="detail-3">—</div>
                 </div>
             </div>
             <div class="step" id="step-4">
                 <div class="step-icon" id="icon-4">04</div>
                 <div class="step-content">
-                    <div class="step-title">Webhook received</div>
+                    <div class="step-title" data-i18n="flow.step4_title">Webhook received</div>
                     <div class="step-detail" id="detail-4">—</div>
                 </div>
             </div>
             <div class="step" id="step-5">
                 <div class="step-icon" id="icon-5">05</div>
                 <div class="step-content">
-                    <div class="step-title">Result</div>
+                    <div class="step-title" data-i18n="flow.step5_title">Result</div>
                     <div class="step-detail" id="detail-5">—</div>
                 </div>
             </div>
@@ -168,7 +186,7 @@
             <div id="resultRows"></div>
         </div>
 
-        <div id="placeholder" style="color:rgba(245,240,232,0.15);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;margin-top:1rem;">
+        <div id="placeholder" style="color:rgba(245,240,232,0.15);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;margin-top:1rem;" data-i18n="flow.placeholder">
             Waiting for request...
         </div>
     </div>
@@ -181,111 +199,214 @@
 </div>
 
 <script>
-    const BACKEND_URL = window.BACKEND_URL || '';
+    // ── i18n ──
+    var currentLang = localStorage.getItem('lang') || 'en';
+    var translations = {};
 
-    function setStep(n, state, detail) {
-        const step = document.getElementById('step-' + n);
-        const icon = document.getElementById('icon-' + n);
-        const det  = document.getElementById('detail-' + n);
-        step.className = 'step ' + state;
-        if (state === 'active')       icon.innerHTML = '<span class="spinning">◌</span>';
-        else if (state === 'done')    icon.innerHTML = '✓';
-        else if (state === 'failed')  icon.innerHTML = '✕';
-        if (detail) det.textContent = detail;
+    function t(key, vars) {
+        var val = key.split('.').reduce(function(o, k) {
+            return o ? o[k] : null;
+        }, translations[currentLang]) || key;
+        if (vars) {
+            Object.keys(vars).forEach(function(k) {
+                val = val.replace('{' + k + '}', vars[k]);
+            });
+        }
+        return val;
     }
 
-    function showResult(type, title, data) {
+    // ── State tracking for re-rendering on lang change ──
+    var stepState = {};
+    var lastResult = null;
+
+    function applyStepTitles() {
+        document.querySelector('#step-1 .step-title').textContent = t('flow.step1_title');
+        document.querySelector('#step-2 .step-title').textContent = t('flow.step2_title');
+        document.querySelector('#step-3 .step-title').textContent = t('flow.step3_title');
+        document.querySelector('#step-4 .step-title').textContent = t('flow.step4_title');
+        document.querySelector('#step-5 .step-title').textContent = t('flow.step5_title');
+    }
+
+    function reapplyStepState() {
+        // Re-render step details with new language
+        Object.keys(stepState).forEach(function(n) {
+            var s = stepState[n];
+            var det = document.getElementById('detail-' + n);
+            if (det && s.detailKey) {
+                det.textContent = t(s.detailKey, s.vars);
+            }
+        });
+        // Re-render result box with new language
+        if (lastResult) {
+            renderResult(lastResult.type, t(lastResult.titleKey), lastResult.rowKeys, lastResult.rowVals);
+        }
+    }
+
+    function applyTranslations() {
+        document.documentElement.lang = currentLang;
+        document.querySelectorAll('[data-i18n]').forEach(function(el) {
+            var key = el.getAttribute('data-i18n');
+            var val = t(key);
+            if (val && val !== key) el.textContent = val;
+        });
+        document.getElementById('phone').placeholder = t('form.phone_placeholder');
+        document.querySelectorAll('.lang-btn').forEach(function(btn) {
+            btn.classList.toggle('active', btn.dataset.lang === currentLang);
+        });
+        applyStepTitles();
+        reapplyStepState();
+    }
+
+    function loadLang(lang) {
+        if (translations[lang]) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            applyTranslations();
+            return;
+        }
+        fetch('/locales/' + lang + '.json')
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                translations[lang] = data;
+                currentLang = lang;
+                localStorage.setItem('lang', lang);
+                applyTranslations();
+            });
+    }
+
+    document.querySelectorAll('.lang-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() { loadLang(btn.dataset.lang); });
+    });
+
+    loadLang(currentLang);
+
+    // ── Subscribe flow ──
+    var BACKEND_URL = window.BACKEND_URL || '';
+
+    function setStep(n, state, detailKey, vars) {
+        // Save state for re-rendering on lang change
+        stepState[n] = { state: state, detailKey: detailKey, vars: vars };
+
+        var step = document.getElementById('step-' + n);
+        var icon = document.getElementById('icon-' + n);
+        var det  = document.getElementById('detail-' + n);
+        step.className = 'step ' + state;
+        if (state === 'active')      icon.innerHTML = '<span class="spinning">◌</span>';
+        else if (state === 'done')   icon.innerHTML = '✓';
+        else if (state === 'failed') icon.innerHTML = '✕';
+        if (detailKey) det.textContent = t(detailKey, vars);
+    }
+
+    function renderResult(type, title, rowKeys, rowVals) {
         document.getElementById('resultBox').className = 'result-box visible';
-        const ttl = document.getElementById('resultTitle');
+        var ttl = document.getElementById('resultTitle');
         ttl.className = 'result-title ' + type;
         ttl.textContent = title;
-        document.getElementById('resultRows').innerHTML = Object.entries(data)
-            .map(([k,v]) => `<div class="result-row"><span class="result-key">${k}</span><span class="result-val">${v}</span></div>`)
-            .join('');
+        document.getElementById('resultRows').innerHTML = rowKeys.map(function(k, i) {
+            return '<div class="result-row"><span class="result-key">' + k + '</span><span class="result-val">' + rowVals[i] + '</span></div>';
+        }).join('');
+    }
+
+    function showResult(type, titleKey, rowKeys, rowVals) {
+        // Save for re-rendering on lang change
+        lastResult = { type: type, titleKey: titleKey, rowKeys: rowKeys, rowVals: rowVals };
+        renderResult(type, t(titleKey), rowKeys.map(function(k) { return t(k); }), rowVals);
     }
 
     function reset() {
-        for (let i = 1; i <= 5; i++) {
+        stepState = {};
+        lastResult = null;
+        for (var i = 1; i <= 5; i++) {
             document.getElementById('step-' + i).className = 'step';
             document.getElementById('icon-' + i).textContent = '0' + i;
             document.getElementById('detail-' + i).textContent = '—';
         }
         document.getElementById('resultBox').className = 'result-box';
+        applyStepTitles();
     }
 
-    function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+    function delay(ms) { return new Promise(function(r) { setTimeout(r, ms); }); }
 
     async function subscribe() {
-        const phone      = document.getElementById('phone').value.trim();
-        const plan       = document.getElementById('plan').value;
-        const forceError = document.getElementById('forceError').checked;
-        const btn        = document.getElementById('btn');
+        var phone      = document.getElementById('phone').value.trim();
+        var plan       = document.getElementById('plan').value;
+        var forceError = document.getElementById('forceError').checked;
+        var btn        = document.getElementById('btn');
 
-        if (!phone) { alert('Phone number is required'); return; }
+        if (!phone) { alert(t('alert.phone_required')); return; }
 
         reset();
         btn.disabled = true;
         document.getElementById('placeholder').style.display = 'none';
         document.getElementById('stepper').className = 'stepper visible';
 
-        setStep(1, 'active', 'Sending subscription request...');
+        setStep(1, 'active', 'status.sending');
         await delay(300);
-        setStep(1, 'done', 'Request sent');
-        setStep(2, 'active', 'Waiting for partner acknowledgement...');
+        setStep(1, 'done', 'status.sent');
+        setStep(2, 'active', 'status.waiting_ack');
 
-        const startTime = Date.now();
+        var startTime = Date.now();
 
         try {
-            const fetchPromise = fetch(`${BACKEND_URL}/subscribe.php`, {
+            var fetchPromise = fetch(BACKEND_URL + '/subscribe.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ phone, plan, force_error: forceError }),
+                body: JSON.stringify({ phone: phone, plan: plan, force_error: forceError }),
             });
 
             await delay(600);
 
             if (!forceError) {
-                setStep(2, 'done', 'ACK: 0 (success)');
-                setStep(3, 'active', 'Blocking on Redis BLPOP (max 5s)...');
-                setStep(4, 'active', 'Waiting for partner webhook...');
+                setStep(2, 'done', 'status.ack_success');
+                setStep(3, 'active', 'status.blpop_waiting');
+                setStep(4, 'active', 'status.webhook_waiting');
             } else {
-                setStep(2, 'done', 'ACK: 1 (forced error)');
+                setStep(2, 'done', 'status.ack_forced');
             }
 
-            const res     = await fetchPromise;
-            const data    = await res.json();
-            const elapsed = ((Date.now() - startTime) / 1000).toFixed(2);
+            var res     = await fetchPromise;
+            var data    = await res.json();
+            var elapsed = ((Date.now() - startTime) / 1000).toFixed(2);
 
             if (data.success) {
-                setStep(3, 'done', `BLPOP unblocked after ~${elapsed}s`);
-                setStep(4, 'done', 'XML parsed · Redis LPUSH received');
-                setStep(5, 'done', 'Subscription active');
-                showResult('success', 'Subscription confirmed', {
-                    phone:   data.data.phone,
-                    plan:    data.data.plan,
-                    price:   '$' + data.data.price + '/mo',
-                    status:  data.data.status,
-                    elapsed: elapsed + 's',
-                });
+                setStep(3, 'done', 'status.blpop_unblocked', { elapsed: elapsed });
+                setStep(4, 'done', 'status.webhook_received');
+                setStep(5, 'done', 'status.subscription_active');
+                showResult('success', 'result.confirmed',
+                    ['result.phone', 'result.plan', 'result.price', 'result.status', 'result.elapsed'],
+                    [data.data.phone, data.data.plan, '$' + data.data.price + '/mo', data.data.status, elapsed + 's']
+                );
             } else if (data.error === 'partner_rejected') {
-                setStep(2, 'failed', 'ACK: ' + (data.ack ?? 1) + ' — partner rejected');
-                setStep(3, 'failed', 'Skipped');
-                setStep(4, 'failed', 'Skipped');
-                setStep(5, 'failed', 'Subscription failed');
-                showResult('error', 'Partner rejected', { error: data.error, ack: data.ack });
+                setStep(2, 'failed', 'status.partner_rejected', { ack: data.ack ?? 1 });
+                setStep(3, 'failed', 'status.skipped');
+                setStep(4, 'failed', 'status.skipped');
+                setStep(5, 'failed', 'status.subscription_failed');
+                showResult('error', 'result.rejected',
+                    ['error', 'ack'],
+                    [data.error, data.ack]
+                );
             } else if (data.error === 'timeout') {
-                setStep(3, 'failed', 'BLPOP timeout after 5s');
-                setStep(4, 'failed', 'Webhook never arrived');
-                setStep(5, 'failed', 'Subscription failed');
-                showResult('error', 'Timeout', { error: 'Webhook did not arrive within 5s' });
+                setStep(3, 'failed', 'status.blpop_timeout');
+                setStep(4, 'failed', 'status.webhook_never');
+                setStep(5, 'failed', 'status.subscription_failed');
+                showResult('error', 'result.timeout',
+                    ['error'],
+                    [t('result.timeout_msg')]
+                );
             } else {
-                setStep(5, 'failed', data.error);
-                showResult('error', 'Error', data);
+                setStep(5, 'failed', 'status.subscription_failed');
+                showResult('error', 'result.error',
+                    ['error'],
+                    [data.error]
+                );
             }
 
         } catch (err) {
-            setStep(5, 'failed', err.message);
-            showResult('error', 'Connection error', { error: err.message });
+            setStep(5, 'failed', 'status.subscription_failed');
+            showResult('error', 'result.connection_error',
+                ['error'],
+                [err.message]
+            );
         } finally {
             btn.disabled = false;
         }
