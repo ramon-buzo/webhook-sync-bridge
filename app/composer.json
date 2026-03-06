@@ -1,0 +1,13 @@
+{
+  "name": "ramon-buzo/webhook-sync-bridge",
+  "description": "Async-to-sync webhook bridge using Redis BLPOP",
+  "type": "project",
+  "require": {
+    "php": "^8.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  }
+}

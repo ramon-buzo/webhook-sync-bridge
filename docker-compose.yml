@@ -1,0 +1,39 @@
+services:
+  app:
+    build: ./app
+    container_name: wsb-app
+    restart: unless-stopped
+    volumes:
+      - ./app/public:/var/www/html/public
+      - ./app/src:/var/www/html/src
+    environment:
+      - REDIS_HOST=redis
+      - PARTNER_MOCK_URL=http://partner-mock:8082
+      - PARTNER_CLIENT_SECRET=${PARTNER_CLIENT_SECRET}
+    depends_on:
+      - redis
+    networks:
+      - proxy-network
+
+  partner-mock:
+    build: ./partner-mock
+    container_name: wsb-partner-mock
+    restart: unless-stopped
+    volumes:
+      - ./partner-mock/index.php:/app/index.php
+    environment:
+      - WEBHOOK_URL=http://app/webhook.php
+      - PARTNER_CLIENT_SECRET=${PARTNER_CLIENT_SECRET}
+    networks:
+      - proxy-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: wsb-redis
+    restart: unless-stopped
+    networks:
+      - proxy-network
+
+networks:
+  proxy-network:
+    external: true

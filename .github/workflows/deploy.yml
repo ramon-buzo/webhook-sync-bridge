@@ -1,0 +1,71 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Detect deploy type
+        id: deploy_type
+        run: |
+          MSG=$(git log -1 --pretty=%B)
+          if echo "$MSG" | grep -qE "\[deploy:reset\]"; then
+            echo "type=full_reset" >> $GITHUB_OUTPUT
+          elif echo "$MSG" | grep -qE "\[deploy:restart\]"; then
+            echo "type=restart" >> $GITHUB_OUTPUT
+          else
+            echo "type=pull" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Deploy — git pull only
+        if: steps.deploy_type.outputs.type == 'pull'
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT }}
+          script: |
+            cd ~/dockerized/webhook-sync-bridge
+            git pull origin main
+            rm -f docker-compose.override.yml
+            rm -rf .local/
+
+      - name: Deploy — docker compose down + up
+        if: steps.deploy_type.outputs.type == 'restart'
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT }}
+          script: |
+            cd ~/dockerized/webhook-sync-bridge
+            git pull origin main
+            rm -f docker-compose.override.yml
+            rm -rf .local/
+            docker compose down
+            docker compose up -d
+
+      - name: Deploy — full reset (down -v + up)
+        if: steps.deploy_type.outputs.type == 'full_reset'
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT }}
+          script: |
+            cd ~/dockerized/webhook-sync-bridge
+            git pull origin main
+            rm -f docker-compose.override.yml
+            rm -rf .local/
+            docker compose down -v
+            docker compose up -d
