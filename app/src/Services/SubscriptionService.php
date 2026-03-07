@@ -42,7 +42,7 @@ class SubscriptionService
             ];
         }
 
-        $result = $this->cache->waitForWebhook($sessionKey, 5);
+        $result = $this->cache->waitForWebhook($sessionKey, 8);
 
         if ($result === null) {
             return [

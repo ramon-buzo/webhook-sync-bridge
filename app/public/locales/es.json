@@ -20,7 +20,7 @@
     "title": "Cómo funciona",
     "step1": "La landing llama al backend → el backend llama al partner mock",
     "step2": "El partner devuelve ACK 0 (ok) o error",
-    "step3": "El backend bloquea en Redis BLPOP (máx 5s)",
+    "step3": "El backend bloquea en Redis BLPOP (máx 8s)",
     "step4": "El partner dispara un webhook XML tras 1–3s de delay",
     "step5": "El webhook escribe en Redis → BLPOP se desbloquea",
     "step6": "El usuario ve el resultado — se siente síncrono"
@@ -40,7 +40,7 @@
     "waiting_ack": "Esperando confirmación del partner...",
     "ack_success": "ACK: 0 (éxito)",
     "ack_forced": "ACK: 1 (error forzado)",
-    "blpop_waiting": "Bloqueando en Redis BLPOP (máx 5s)...",
+    "blpop_waiting": "Bloqueando en Redis BLPOP (máx 8s)...",
     "webhook_waiting": "Esperando webhook del partner...",
     "blpop_unblocked": "BLPOP desbloqueado tras ~{elapsed}s",
     "webhook_received": "XML procesado · Redis LPUSH recibido",

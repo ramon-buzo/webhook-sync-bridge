@@ -20,7 +20,7 @@
     "title": "How it works",
     "step1": "Landing calls backend → backend calls partner mock",
     "step2": "Partner returns ACK 0 (ok) or error",
-    "step3": "Backend blocks on Redis BLPOP (max 5s)",
+    "step3": "Backend blocks on Redis BLPOP (max 8s)",
     "step4": "Partner fires XML webhook after 1–3s delay",
     "step5": "Webhook writes to Redis → BLPOP wakes up",
     "step6": "User sees result — feels synchronous"
@@ -40,7 +40,7 @@
     "waiting_ack": "Waiting for partner acknowledgement...",
     "ack_success": "ACK: 0 (success)",
     "ack_forced": "ACK: 1 (forced error)",
-    "blpop_waiting": "Blocking on Redis BLPOP (max 5s)...",
+    "blpop_waiting": "Blocking on Redis BLPOP (max 8s)...",
     "webhook_waiting": "Waiting for partner webhook...",
     "blpop_unblocked": "BLPOP unblocked after ~{elapsed}s",
     "webhook_received": "XML parsed · Redis LPUSH received",
